@@ -11,8 +11,16 @@ By default this uses schroot to execute commands within the chroot.
 - The variable `g:vcb_src_path` is the path to the source code.
 
 Once those variables are set you can run the following functions to perform common operations in the
-chrooted build environment.
+chrooted build environment. For the examples below assume that the following configuration is true:
 
-- `call VCBConfigure()`. This will execute ../configure in the path `g:vcb_src_path`/build-`g:vcb_chroot_name`
-- `call VCBMake()`. This will run make in the path `g:vcb_src_path`/build-`g:vcb_chroot_name`
+`let g:vcb_chroot_name=sles12`
+`let g:vcb_user=joe`
+`let g:vcb_src_path=/home/joe/my-secret-project`
+
+- `call VCBConfigure()`. This will execute ../configure in the path `/home/joe/my-secret-project/build-sles12`
+- `call VCBMake()`. This will run make in the path `/home/joe/my-secret-project/build-sles12`
+- `call VCBAutoreconf()`. This will run autoreconf *outside* the chroot since the output from
+  autoreconf is generates files so that configure can run on any host. There wouldn't be any harm in
+  running it inside the chroot, but if you have multiple chroots then running autoreconf from inside
+  them will create different INSTALL, ltmain.sh, aclocal.m4 files etc... per chroot.
 
