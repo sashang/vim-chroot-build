@@ -31,14 +31,9 @@ function! VCBConfigure()
 endfunction
 
 function! VCBMake()
-    if VCBCheckConfigure()
-        let l:temp = &makeprg
-        let &makeprg = 'schroot -u'.g:vcb_user.' -c'.g:vcb_chroot_name.' -d'.g:vcb_src_path.'/build-'.g:vcb_chroot_name.' -- make'
-        execute 'make'
-        let &makeprg = l:temp
-        return 1
-    else
-        return 0
-    endif
+    let l:temp = &makeprg
+    let &makeprg = 'schroot -u'.g:vcb_user.' -c'.g:vcb_chroot_name.' -d'.g:vcb_src_path.'/build-'.g:vcb_chroot_name.' -- make'
+    execute 'make'
+    let &makeprg = l:temp
 endfunction
 
