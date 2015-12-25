@@ -17,11 +17,15 @@ Once those variables are set you can run the following functions to perform comm
 chrooted build environment. For the examples below assume that the following configuration is true:
 
 `let g:vcb_chroot_name=sles12`
+
 `let g:vcb_user=joe`
+
 `let g:vcb_src_path=/home/joe/my-secret-project`
 
 - `call VCBConfigure()`. This will execute ../configure in the path `/home/joe/my-secret-project/build-sles12`
+
 - `call VCBMake()`. This will run make in the path `/home/joe/my-secret-project/build-sles12`
+
 - `call VCBAutoreconf()`. This will run autoreconf *outside* the chroot since the output from
   autoreconf is generates files so that configure can run on any host. There wouldn't be any harm in
   running it inside the chroot, but if you have multiple chroots then running autoreconf from inside
