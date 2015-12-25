@@ -1,7 +1,10 @@
 # vim-chroot-build
 Build in chroots from vim.
 
-### Features and Usage
+## Installation
+`:source ~/vim-chroot-build`
+
+## Features and Usage
 By default this uses schroot to execute commands within the chroot.
 
 - The variable `g:vcb_chroot_name` is the name of the chroot. schroot -l will list the chroots on
