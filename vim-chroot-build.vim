@@ -1,18 +1,4 @@
-
-function! VCBCheckConfigure()
-    if empty(g:vcb_src_path)
-        let s:path=getcwd()
-        echo s:path
-    else
-        let s:path=g:vcb_src_path
-    endif
-    if filereadable(s:path."/configure.ac")
-        return 1
-    else
-        echo "Could not find configure.ac in '".g:vcb_src_path."' Is g:vcb_src_path set correctly?"
-        return 0
-    endif
-endfunction
+let s:vcb_src_path = ""
 
 " search up parent until $HOME for configure.ac
 function! VCBFindConfigureac()
@@ -20,12 +6,13 @@ function! VCBFindConfigureac()
     while (1)
         " ==# is the case sensitive match, == depends on what the ignorecase is set to.
         if (l:path ==# $HOME)
-            echom "Could not find configure.ac"
+            echoe "Could not find configure.ac"
             return 0
         else
             let l:find = l:path."/configure.ac"
-            echom l:find
             if filereadable(l:find)
+                echom "Found configure.ac: ".l:find
+                let s:vcb_src_path = l:path
                 return 1
             else
                 let l:path = fnamemodify(l:path, ":h")
@@ -35,48 +22,37 @@ function! VCBFindConfigureac()
 endfunction
 
 function! VCBAutoreconf()
-    if empty(g:vcb_src_path)
-        let s:path=getcwd()
-        echo s:path
-    else
-        let s:path=g:vcb_src_path
+    if !VCBFindConfigureac()
+        return 0
     endif
-    if VCBCheckConfigure()
-        let f = system("cd ".g:vcb_src_path."; autoreconf -fvi")
-        echo f
-        return 1
-    endif
-    return 0
+    execute '!env -i SHELL=/bin/bash TERM=xterm CC="ccache gcc" CXX="ccache g++"
+        \ schroot -p -u'.g:vcb_user.' -c'.g:vcb_chroot_name.' -d'.s:vcb_src_path.' -- autoreconf -vfi'
+    return 1
 endfunction
 
 function! VCBConfigure()
-    if empty(g:vcb_src_path)
-        let s:path=getcwd()
-    else
-        let s:path=g:vcb_src_path
-    endif
-    if VCBCheckConfigure()
-        execute '!schroot -p -u'.g:vcb_user.' -c'.g:vcb_chroot_name.' -d'.s:path.'/build-'.g:vcb_chroot_name.' -- ../configure'
-        return 1
-    else
+    if !VCBFindConfigureac()
         return 0
     endif
+    execute '!env -i SHELL=/bin/bash TERM=xterm CC="ccache gcc" CXX="ccache g++" 
+        \ schroot -p -u'.g:vcb_user.' -c'.g:vcb_chroot_name.' -d'.s:vcb_src_path.'/build-'.g:vcb_chroot_name.' -- ../configure'
+    return 1
 endfunction
 
 function! VCBMake(...)
-    if empty(g:vcb_src_path)
-        let s:path=getcwd()
-    else
-        let s:path=g:vcb_src_path
+    if !VCBFindConfigureac()
+        return 0
     endif
-    echom s:path
     let l:temp = &makeprg
     if a:0 == 1
-        let &makeprg = 'schroot -u'.g:vcb_user.' -c'.g:vcb_chroot_name.' -d'.s:path.'/build-'.g:vcb_chroot_name.' -- make '.a:1
+        let &makeprg = 'env -i SHELL=/bin/bash TERM=xterm CC="ccache gcc" CXX="ccache g++"
+            \ schroot -p -u'.g:vcb_user.' -c'.g:vcb_chroot_name.' -d'.s:vcb_src_path.'/build-'.g:vcb_chroot_name.' -s /bin/bash -- make '.a:1
     else
-        let &makeprg = 'schroot -u'.g:vcb_user.' -c'.g:vcb_chroot_name.' -d'.s:path.'/build-'.g:vcb_chroot_name.' -- make'
+        let &makeprg = 'env -i SHELL=/bin/bash TERM=xterm CC="ccache gcc" CXX="ccache g++"
+            \ schroot -p -u'.g:vcb_user.' -c'.g:vcb_chroot_name.' -d'.s:vcb_src_path.'/build-'.g:vcb_chroot_name.' -s /bin/bash -- make'
     endif
     execute 'make'
     let &makeprg = l:temp
+    return 1
 endfunction
 
