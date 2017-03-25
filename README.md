@@ -8,7 +8,7 @@ Build in chroots from vim.
 By default this uses schroot to execute commands within the chroot.
 
 - The variable `g:vcb_chroot_name` is the name of the chroot. schroot -l will list the chroots on
-  your system. Set it to one of these names. For example `let g:vcb_chroot_name=sles12`. 
+  your system. Set it to one of these names. For example `let g:vcb_chroot_name=sles12`.
 - The variable `g:vcb_user` is the user name used to login to the chroot. For example, `let
   g:vcb_user=joe`
 
@@ -23,8 +23,5 @@ chrooted build environment. For the examples below assume that the following con
 
 - `call VCBMake()`. This will run make in the path `/home/joe/my-secret-project/build-sles12`
 
-- `call VCBAutoreconf()`. This will run autoreconf *outside* the chroot since the output from
-  autoreconf is generates files so that configure can run on any host. There wouldn't be any harm in
-  running it inside the chroot, but if you have multiple chroots then running autoreconf from inside
-  them will create different INSTALL, ltmain.sh, aclocal.m4 files etc... per chroot.
+- `call VCBAutoreconf()`. This will run autoreconf inside the chroot. 
 
