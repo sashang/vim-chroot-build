@@ -2,8 +2,8 @@
 Build in chroots from vim.
 
 ## Requirements
-schroot (https://linux.die.net/man/1/schroot)
-autotools
+- schroot (https://linux.die.net/man/1/schroot)
+- autotools
 
 ## Installation
 Install using Vundle by adding this to your .vimrc:
