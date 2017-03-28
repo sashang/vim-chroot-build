@@ -7,7 +7,6 @@
 " License:       You may redistribute this plugin under the same terms as Vim
 "                itself.
 "
-" Requirements:  schroot 
 
 let s:vcb_src_path = ""
 
@@ -45,7 +44,7 @@ function! VCBConfigure()
     if !VCBFindConfigureac()
         return 0
     endif
-    execute '!env -i SHELL=/bin/bash TERM=xterm CC="ccache gcc" CXX="ccache g++" 
+    execute '!env -i SHELL=/bin/bash TERM=xterm CC="ccache gcc" CXX="ccache g++"
         \ schroot -p -u'.g:vcb_user.' -c'.g:vcb_chroot_name.' -d'.s:vcb_src_path.'/build-'.g:vcb_chroot_name.' -- ../configure'
     return 1
 endfunction
