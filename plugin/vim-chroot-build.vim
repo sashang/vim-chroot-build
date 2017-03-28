@@ -1,3 +1,14 @@
+" Name:          vim-chroot-build (global plugin)
+" Version:       1.0
+" Author:        Sashan Govender <sashang@gmail.com>
+" Updates:       http://github.com/sashang/vim-chroot-build
+" Purpose:       Build source code within a chroot using schroot.
+"
+" License:       You may redistribute this plugin under the same terms as Vim
+"                itself.
+"
+" Requirements:  schroot 
+
 let s:vcb_src_path = ""
 
 " search up parent until $HOME for configure.ac
