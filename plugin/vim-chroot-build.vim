@@ -31,8 +31,31 @@ function! VCBFindConfigureac()
     endwhile
 endfunction
 
+" ensure global settings are nor empty
+function! VCBEnsureGlobals()
+    if empty(g:vcb_chroot_name)
+        echoe 'Please set vcb_chroot_name'
+        return 0
+    endif
+    if empty(g:vcb_user)
+        echoe 'Please set vcb_user'
+        return 0
+    endif
+    return 1
+endfunction
+
+function! VCBMkBuildDir()
+    if !VCBFindConfigureac() || !VCBEnsureGlobals()
+        echoe 'Failed to make build dir'
+        return 0
+    endif
+    execute '!mkdir '.s:vcb_src_path.'/build-'.g:vcb_chroot_name
+    return 1
+endfunction
+
 function! VCBAutoreconf()
-    if !VCBFindConfigureac()
+    if !VCBFindConfigureac() || !VCBEnsureGlobals()
+        echoe 'Failed to run autoreconf'
         return 0
     endif
     execute '!env -i SHELL=/bin/bash TERM=xterm CC="ccache gcc" CXX="ccache g++"
@@ -41,18 +64,20 @@ function! VCBAutoreconf()
 endfunction
 
 function! VCBConfigure()
-    if !VCBFindConfigureac()
+    if !VCBFindConfigureac() || !VCBEnsureGlobals()
         return 0
     endif
+    VCBMkBuildDir()
     execute '!env -i SHELL=/bin/bash TERM=xterm CC="ccache gcc" CXX="ccache g++"
         \ schroot -p -u'.g:vcb_user.' -c'.g:vcb_chroot_name.' -d'.s:vcb_src_path.'/build-'.g:vcb_chroot_name.' -- ../configure'
     return 1
 endfunction
 
 function! VCBMake(...)
-    if !VCBFindConfigureac()
+    if !VCBFindConfigureac() || !VCBEnsureGlobals()
         return 0
     endif
+    VCBMkBuildDir()
     let l:temp = &makeprg
     if a:0 == 1
         let &makeprg = 'env -i SHELL=/bin/bash TERM=xterm CC="ccache gcc" CXX="ccache g++"
