@@ -69,7 +69,7 @@ function! VCBConfigure()
     endif
     call VCBMkBuildDir()
     execute '!env -i SHELL=/bin/bash TERM=xterm CC="ccache gcc" CXX="ccache g++"
-        \ schroot -p -u'.g:vcb_user.' -c'.g:vcb_chroot_name.' -d'.s:vcb_src_path.'/build-'.g:vcb_chroot_name.' -- ../configure'
+        \ schroot -p -u'.g:vcb_user.' -c'.g:vcb_chroot_name.' -d'.s:vcb_src_path.'/build-'.g:vcb_chroot_name.' -- ../configure --enable-tests'
     return 1
 endfunction
 
