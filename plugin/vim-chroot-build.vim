@@ -63,14 +63,14 @@ function! VCBAutoreconf()
     return 1
 endfunction
 
-function! VCBConfigure()
+function! VCBConfigure(...)
     if !VCBFindConfigureac() || !VCBEnsureGlobals()
         return 0
     endif
     call VCBMkBuildDir()
     execute '!env -i SHELL=/bin/bash TERM=xterm CC="ccache gcc" CXX="ccache g++"
         \ schroot -p -u'.g:vcb_user.' -c'.g:vcb_chroot_name.
-        \ ' -d'.s:vcb_src_path.'/build-'.g:vcb_chroot_name.' -- ../configure '.g:vcb_configure_args
+        \ ' -d'.s:vcb_src_path.'/build-'.g:vcb_chroot_name.' -- ../configure '.join(a:000)
     return 1
 endfunction
 
@@ -91,4 +91,7 @@ function! VCBMake(...)
     let &makeprg = l:temp
     return 1
 endfunction
+
+command! -nargs=* SConfigure call VCBConfigure(<f-args>)
+command! -nargs=* SMake call VCBMake(<f-args>)
 

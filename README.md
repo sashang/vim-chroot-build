@@ -40,8 +40,6 @@ chrooted build environment. For the examples below assume that the following con
 
 `let g:vcb_user=joe`
 
-`let g:vcb_configure_args=--enable-this --disable-that`
-
 - `call VCBConfigure()`. This will execute ../configure in the path `/home/joe/my-secret-project/build-sles12`
 
 - `call VCBMake()`. This will run make in the path `/home/joe/my-secret-project/build-sles12`
