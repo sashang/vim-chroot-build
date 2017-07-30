@@ -44,7 +44,7 @@ chrooted build environment. For the examples below assume that the following con
 
 - `:SConfigure`. This will execute ../configure in the path `/home/joe/my-secret-project/build-sles12`
 
-- `SMake`. This will run make in the path `/home/joe/my-secret-project/build-sles12`
+- `:SMake`. This will run make in the path `/home/joe/my-secret-project/build-sles12`
 
-- `SAutoreconf`. This will run autoreconf inside the chroot. 
+- `:SAutoreconf`. This will run autoreconf inside the chroot. 
 
