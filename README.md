@@ -15,7 +15,10 @@ directory. You can think of it as virtualizing the filesystem. This plugin just 
 in the chrooted environment so you don't have to manually do it.
 
 ## Installation
-Install using Vundle by adding this to your .vimrc:
+This plugin requires AsyncRun (https://github.com/skywind3000/asyncrun.vim)
+
+## Installation
+Install using Vundle by adding this to your .vimrc in your Vundle section:
 
 `Plugin 'sashang/vim-chroot-build'`
 
@@ -39,9 +42,9 @@ chrooted build environment. For the examples below assume that the following con
 
 `let g:vcb_user=joe`
 
-- `call VCBConfigure()`. This will execute ../configure in the path `/home/joe/my-secret-project/build-sles12`
+- `:SConfigure`. This will execute ../configure in the path `/home/joe/my-secret-project/build-sles12`
 
-- `call VCBMake()`. This will run make in the path `/home/joe/my-secret-project/build-sles12`
+- `SMake`. This will run make in the path `/home/joe/my-secret-project/build-sles12`
 
-- `call VCBAutoreconf()`. This will run autoreconf inside the chroot. 
+- `SAutoreconf`. This will run autoreconf inside the chroot. 
 
