@@ -14,7 +14,7 @@ filesystem images for those distributions and use schroot to manage them, while 
 directory. You can think of it as virtualizing the filesystem. This plugin just runs the build steps
 in the chrooted environment so you don't have to manually do it.
 
-## Installation
+## Prerequisites
 This plugin requires AsyncRun (https://github.com/skywind3000/asyncrun.vim)
 
 ## Installation
