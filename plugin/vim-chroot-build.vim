@@ -8,6 +8,7 @@
 "                itself.
 "
 
+source $HOME/.vim/bundle/asyncrun.vim/plugin/asyncrun.vim
 let s:vcb_src_path = ""
 
 " search up parent until $HOME for configure.ac
@@ -53,13 +54,14 @@ function! VCBMkBuildDir()
     return 1
 endfunction
 
-function! VCBAutoreconf()
+function! VCBAutoreconf(...)
     if !VCBFindConfigureac() || !VCBEnsureGlobals()
         echoe 'Failed to run autoreconf'
         return 0
     endif
-    execute '!env -i SHELL=/bin/bash TERM=xterm CC="ccache gcc" CXX="ccache g++"
-        \ schroot -p -u'.g:vcb_user.' -c'.g:vcb_chroot_name.' -d'.s:vcb_src_path.' -- autoreconf -vfi'
+    let l:temp = 'env -i SHELL=/bin/bash TERM=xterm CC="ccache gcc" CXX="ccache g++"
+        \ schroot -p -u'.g:vcb_user.' -c'.g:vcb_chroot_name.' -d'.s:vcb_src_path.' -- autoreconf '.join(a:000)
+    call asyncrun#run('<bang>', '', l:temp)
     return 1
 endfunction
 
@@ -68,9 +70,10 @@ function! VCBConfigure(...)
         return 0
     endif
     call VCBMkBuildDir()
-    execute '!env -i SHELL=/bin/bash TERM=xterm CC="ccache gcc" CXX="ccache g++"
+    let l:temp = 'env -i SHELL=/bin/bash TERM=xterm CC="ccache gcc" CXX="ccache g++"
         \ schroot -p -u'.g:vcb_user.' -c'.g:vcb_chroot_name.
         \ ' -d'.s:vcb_src_path.'/build-'.g:vcb_chroot_name.' -- ../configure '.join(a:000)
+    call asyncrun#run('<bang>', '', l:temp)
     return 1
 endfunction
 
@@ -79,19 +82,14 @@ function! VCBMake(...)
         return 0
     endif
     call VCBMkBuildDir()
-    let l:temp = &makeprg
-    if a:0 == 1
-        let &makeprg = 'env -i SHELL=/bin/bash TERM=xterm CC="ccache gcc" CXX="ccache g++"
-            \ schroot -p -u'.g:vcb_user.' -c'.g:vcb_chroot_name.' -d'.s:vcb_src_path.'/build-'.g:vcb_chroot_name.' -s /bin/bash -- make '.a:1
-    else
-        let &makeprg = 'env -i SHELL=/bin/bash TERM=xterm CC="ccache gcc" CXX="ccache g++"
-            \ schroot -p -u'.g:vcb_user.' -c'.g:vcb_chroot_name.' -d'.s:vcb_src_path.'/build-'.g:vcb_chroot_name.' -s /bin/bash -- make'
-    endif
-    execute 'make'
-    let &makeprg = l:temp
+    let l:temp = 'env -i SHELL=/bin/bash TERM=xterm CC="ccache gcc" CXX="ccache g++"
+                \ schroot -p -u'.g:vcb_user.' -c'.g:vcb_chroot_name.'
+                \ -d'.s:vcb_src_path.'/build-'.g:vcb_chroot_name.' -s /bin/bash -- make '.join(a:000)
+    call asyncrun#run('<bang>', '', l:temp)
     return 1
 endfunction
 
 command! -nargs=* SConfigure call VCBConfigure(<f-args>)
 command! -nargs=* SMake call VCBMake(<f-args>)
+command! -nargs=* SAutoreconf call VCBAutoreconf(<f-args>)
 
