@@ -12,8 +12,10 @@ can do is make a of the filesystem image of the target distribution, install the
 need on this filesystem and then run it in a chroot. So for example if I'm using Arch as my desktop
 environment but I want to compile my programs for SLES11 or Ubuntu12 or Centos5 I can make
 filesystem images for those distributions and use schroot to manage them, while preserving my home
-directory. You can think of it as virtualizing the filesystem. This plugin just runs the build steps
-in the chrooted environment so you don't have to manually do it.
+directory. You can think of a chroot as something that virtualizes the filesystem only, as opposed
+to a container which virtualizes everything above the kernel (filesystem, network resources,
+processes etc...). This plugin just runs the build steps in the chrooted environment so you don't
+have to manually do it.
 
 ## Installation
 Install using Vundle by adding this to your .vimrc in your Vundle section:
