@@ -4,6 +4,7 @@ Build in chroots from vim.
 ## Requirements
 - schroot (https://linux.die.net/man/1/schroot)
 - autotools
+- AsyncRun (https://github.com/skywind3000/asyncrun.vim)
 
 ## What on earth is this schroot/chroot thing
 Basically if you want to build for a distribution that is different from the one you use, what you
@@ -13,9 +14,6 @@ environment but I want to compile my programs for SLES11 or Ubuntu12 or Centos5 
 filesystem images for those distributions and use schroot to manage them, while preserving my home
 directory. You can think of it as virtualizing the filesystem. This plugin just runs the build steps
 in the chrooted environment so you don't have to manually do it.
-
-## Prerequisites
-This plugin requires AsyncRun (https://github.com/skywind3000/asyncrun.vim)
 
 ## Installation
 Install using Vundle by adding this to your .vimrc in your Vundle section:
