@@ -61,7 +61,7 @@ function! VCBAutoreconf(...)
         echoe 'Failed to run autoreconf'
         return 0
     endif
-    let l:temp = 'env -i SHELL=/bin/bash TERM=xterm CC="ccache gcc" CXX="ccache g++"
+    let l:temp = 'env -i SHELL=/bin/bash TERM=xterm
         \ schroot -p -u'.g:vcb_user.' -c'.g:vcb_chroot_name.' -d'.s:vcb_src_path.' -- autoreconf '.join(a:000)
     call asyncrun#run('<bang>', '', l:temp)
     return 1
