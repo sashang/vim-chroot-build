@@ -48,3 +48,6 @@ chrooted build environment. For the examples below assume that the following con
 
 - `:SAutoreconf`. This will run autoreconf inside the chroot. 
 
+- `:SStop`. Stop any command currently executing.
+
+

@@ -8,8 +8,10 @@
 "                itself.
 "
 
-source $HOME/.vim/bundle/asyncrun.vim/plugin/asyncrun.vim
+runtime plugin/asyncrun.vim
 let s:vcb_src_path = ""
+let g:vcb_cc = "gcc"
+let g:vcb_cxx = "g++"
 
 " search up parent until $HOME for configure.ac
 function! VCBFindConfigureac()
@@ -50,7 +52,7 @@ function! VCBMkBuildDir()
         echoe 'Failed to make build dir'
         return 0
     endif
-    execute '!mkdir '.s:vcb_src_path.'/build-'.g:vcb_chroot_name
+    execute '!mkdir '.s:vcb_src_path.'/build-'.g:vcb_chroot_name.' > /dev/null 2>&1'
     return 1
 endfunction
 
@@ -70,10 +72,10 @@ function! VCBConfigure(...)
         return 0
     endif
     call VCBMkBuildDir()
-    let l:temp = 'env -i SHELL=/bin/bash TERM=xterm CC="ccache gcc" CXX="ccache g++"
+    let l:temp = 'env -i SHELL=/bin/bash TERM=xterm CC='.g:vcb_cc.' CXX='.g:vcb_cxx.'
         \ schroot -p -u'.g:vcb_user.' -c'.g:vcb_chroot_name.
         \ ' -d'.s:vcb_src_path.'/build-'.g:vcb_chroot_name.' -- ../configure '.join(a:000)
-    call asyncrun#run('<bang>', '', l:temp)
+    call asyncrun#run('<bang>', 'mode=1', l:temp)
     return 1
 endfunction
 
@@ -82,14 +84,15 @@ function! VCBMake(...)
         return 0
     endif
     call VCBMkBuildDir()
-    let l:temp = 'env -i SHELL=/bin/bash TERM=xterm CC="ccache gcc" CXX="ccache g++"
+    let l:temp='env -i SHELL=/bin/bash TERM=xterm CC='.g:vcb_cc.' CXX='.g:vcb_cxx.'
                 \ schroot -p -u'.g:vcb_user.' -c'.g:vcb_chroot_name.'
                 \ -d'.s:vcb_src_path.'/build-'.g:vcb_chroot_name.' -s /bin/bash -- make '.join(a:000)
-    call asyncrun#run('<bang>', '', l:temp)
+    call asyncrun#run('<bang>', 'mode=1', l:temp)
     return 1
 endfunction
 
 command! -nargs=* SConfigure call VCBConfigure(<f-args>)
 command! -nargs=* SMake call VCBMake(<f-args>)
 command! -nargs=* SAutoreconf call VCBAutoreconf(<f-args>)
+command! -nargs=* SStop call asyncrun#stop('')
 
