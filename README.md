@@ -51,4 +51,8 @@ chrooted build environment. For the examples below assume that the following con
 
 - `:SStop`. Stop any command currently executing.
 
+You can change the compiler by setting the following global variables:
+
+`let g:vcb_cc='ccache\ gcc'`
+`let g:vcb_cxx='ccache\ g++'`
 
