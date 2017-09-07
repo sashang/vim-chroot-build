@@ -8,12 +8,13 @@ Build in chroots from vim.
 
 ## What on earth is this schroot/chroot thing
 Basically if you want to build for a distribution that is different from the one you use, what you
-can do is make a filesystem image of the target distribution, install the build tools you
-need on this filesystem and then run it in a chroot. So for example if I'm using Arch as my desktop
+can do is make a filesystem image of the target distribution, install the build tools you need on
+this filesystem and then run it in a chroot. So for example if I'm using Arch as my desktop
 environment but I want to compile my programs for SLES11 or Ubuntu12 or Centos5 I can make
-filesystem images for those distributions and use schroot to manage them, while preserving my home
-directory. You can think of a chroot as something that virtualizes the filesystem only, as opposed
-to a container which virtualizes everything above the kernel (filesystem, network resources,
+filesystem images for those distributions and use schroot to manage them. schroot will automount my
+home directory inside the chroot. This is very useful. Using a container you will have to configure
+this yourself. You can think of a chroot as something that virtualizes the filesystem only, as
+opposed to a container which virtualizes everything above the kernel (filesystem, network resources,
 processes etc...). This plugin just runs the build steps in the chrooted environment so you don't
 have to manually do it.
 
