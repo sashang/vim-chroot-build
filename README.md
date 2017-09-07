@@ -8,7 +8,7 @@ Build in chroots from vim.
 
 ## What on earth is this schroot/chroot thing
 Basically if you want to build for a distribution that is different from the one you use, what you
-can do is make a of the filesystem image of the target distribution, install the build tools you
+can do is make a filesystem image of the target distribution, install the build tools you
 need on this filesystem and then run it in a chroot. So for example if I'm using Arch as my desktop
 environment but I want to compile my programs for SLES11 or Ubuntu12 or Centos5 I can make
 filesystem images for those distributions and use schroot to manage them, while preserving my home
