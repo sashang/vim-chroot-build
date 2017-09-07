@@ -3,7 +3,6 @@ Build in chroots from vim.
 
 ## Requirements
 - schroot (https://linux.die.net/man/1/schroot)
-- autotools
 - AsyncRun (https://github.com/skywind3000/asyncrun.vim)
 
 ## What on earth is this schroot/chroot thing
